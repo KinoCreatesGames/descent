@@ -38,7 +38,8 @@ class PlayState extends FlxState {
 		var scrnPos = FlxG.mouse.getScreenPosition();
 		var diffX = FlxG.mouse.x - scrnPos.y;
 		var diffY = FlxG.mouse.y - scrnPos.y;
-		player.crossHair.setPosition(FlxG.mouse.x, FlxG.mouse.y);
+
+		player.crossHair.setPosition(scrnPos.x, scrnPos.y);
 	}
 
 	public function processCollisions() {

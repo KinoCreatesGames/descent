@@ -30,7 +30,7 @@ class Player extends FlxSprite {
 		crossHair.loadGraphic(AssetPaths.cross_hair__png, true, 8, 8, true);
 		crossHair.animation.add('std', [0]);
 		crossHair.animation.add('target', [1]);
-		// crossHair.scrollFactor.set(0, 0);
+		crossHair.scrollFactor.set(0, 0);
 		// FlxG.mouse.load(crossHair.framePixels);
 	}
 
@@ -75,7 +75,7 @@ class Player extends FlxSprite {
 			}
 			velocity.x = direction * MOVE_SPEED;
 		}
-		velocity.y = GRAVITY;
+		acceleration.y = GRAVITY;
 		// Bind the X value of the sprite character on x axis
 		this.x = FlxMath.bound(this.x, 0, FlxG.width);
 	}

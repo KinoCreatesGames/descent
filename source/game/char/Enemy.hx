@@ -22,7 +22,5 @@ class Enemy extends game.char.Actor {
 		updateMovement(elapsed);
 	}
 
-	public function updateMovement(elapsed:Float) {
-		velocity.y = GRAVITY;
-	}
+	public function updateMovement(elapsed:Float) {}
 }
