@@ -1,3 +1,25 @@
 package game.char;
 
-class Turtle extends Enemy {}
+import flixel.util.FlxPath;
+
+/**
+ * Turtle AI, move left and right
+ */
+class Turtle extends Enemy {
+	public static inline var TURTLE_SPEED:Float = 50;
+
+	public function new(x:Float, y:Float) {
+		var dir = FlxG.random.sign();
+		var loopPath = [new FlxPoint(0,
+			this.y), new FlxPoint(FlxG.width, this.y)];
+		super(x, y, loopPath, null);
+
+		this.path = new FlxPath(this.walkPath);
+		var pathType = dir == -1 ? FlxPath.LOOP_FORWARD : FlxPath.LOOP_BACKWARD;
+		this.path.start(null, TURTLE_SPEED, pathType);
+	}
+
+	override public function setSprite() {
+		makeGraphic(8, 8, KColor.YELLOW);
+	}
+}

@@ -15,7 +15,10 @@ class Enemy extends game.char.Actor {
 		if (monsterData != null) {
 			points = monsterData.points;
 		}
+		setSprite();
 	}
+
+	public function setSprite() {}
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
