@@ -23,7 +23,7 @@ class PlayState extends FlxState {
 
 	public function createGroups() {
 		enemyGrp = new FlxTypedGroup<Enemy>();
-		var enemy = new Enemy(32, 32, [], null);
+		var enemy = new Turtle(32, 32);
 		enemyGrp.add(enemy);
 		add(enemyGrp);
 	}

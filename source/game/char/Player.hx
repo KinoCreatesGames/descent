@@ -75,7 +75,7 @@ class Player extends FlxSprite {
 			}
 			velocity.x = direction * MOVE_SPEED;
 		}
-		acceleration.y = GRAVITY;
+		// acceleration.y = GRAVITY;
 		// Bind the X value of the sprite character on x axis
 		this.x = FlxMath.bound(this.x, 0, FlxG.width);
 	}
