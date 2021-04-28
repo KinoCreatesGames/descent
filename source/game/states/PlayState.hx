@@ -18,7 +18,7 @@ class PlayState extends FlxState {
 	public function createPlayer() {
 		player = new Player(24, 24);
 		add(player);
-		FlxG.camera.follow(player, TOPDOWN, 2);
+		FlxG.camera.follow(player, TOPDOWN_TIGHT, 1);
 	}
 
 	public function createGroups() {
@@ -30,7 +30,15 @@ class PlayState extends FlxState {
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+		updateCursorPosition(elapsed);
 		processCollisions();
+	}
+
+	public function updateCursorPosition(elapsed:Float) {
+		var scrnPos = FlxG.mouse.getScreenPosition();
+		var diffX = FlxG.mouse.x - scrnPos.y;
+		var diffY = FlxG.mouse.y - scrnPos.y;
+		player.crossHair.setPosition(FlxG.mouse.x, FlxG.mouse.y);
 	}
 
 	public function processCollisions() {
@@ -41,9 +49,6 @@ class PlayState extends FlxState {
 				player.currentTarget = null;
 			}
 		});
-		// if (!FlxG.overlap(player.crossHair, enemyGrp, crossHairTouchEnemy)) {
-		// 	player.currentTarget = null;
-		// }
 	}
 
 	public function crossHairTouchEnemy(crossHair:FlxSprite, enemy:Enemy) {

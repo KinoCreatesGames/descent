@@ -5,7 +5,7 @@ import flixel.math.FlxMath;
 class Player extends FlxSprite {
 	public static inline var MOVE_SPEED:Float = 120;
 	public static inline var DRAG_X:Float = 100;
-	public static inline var GRAVITY:Float = 500;
+	public static inline var GRAVITY:Float = 100;
 
 	public var crossHair:FlxSprite;
 	public var currentTarget:Enemy;
@@ -30,7 +30,6 @@ class Player extends FlxSprite {
 		crossHair.loadGraphic(AssetPaths.cross_hair__png, true, 8, 8, true);
 		crossHair.animation.add('std', [0]);
 		crossHair.animation.add('target', [1]);
-		crossHair.useFramePixels = true;
 		// crossHair.scrollFactor.set(0, 0);
 		// FlxG.mouse.load(crossHair.framePixels);
 	}
@@ -62,11 +61,11 @@ class Player extends FlxSprite {
 		var right = FlxG.keys.anyPressed([D, RIGHT]);
 		velocity.x = 0;
 		var direction = 1;
-		var mousePos = FlxG.mouse.getWorldPosition()
-			.copyTo(FlxPoint.weak(0, 0));
-		var scPos = FlxG.mouse.getScreenPosition();
+		// var mousePos = FlxG.mouse.getWorldPosition()
+		// 	.copyTo(FlxPoint.weak(0, 0));
+		// var scPos = FlxG.mouse.getScreenPosition();
 		// crossHair.setPosition(scPos.x, scPos.y);
-		crossHair.setPosition(FlxG.mouse.x, FlxG.mouse.y);
+		// crossHair.setPosition(FlxG.mouse.x, FlxG.mouse.y);
 
 		if (left || right) {
 			if (left) {}
@@ -76,7 +75,7 @@ class Player extends FlxSprite {
 			}
 			velocity.x = direction * MOVE_SPEED;
 		}
-		velocity.y += GRAVITY * elapsed;
+		velocity.y = GRAVITY;
 		// Bind the X value of the sprite character on x axis
 		this.x = FlxMath.bound(this.x, 0, FlxG.width);
 	}

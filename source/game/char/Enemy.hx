@@ -3,7 +3,7 @@ package game.char;
 import flixel.math.FlxVelocity;
 
 class Enemy extends game.char.Actor {
-	public static inline var GRAVITY:Float = 500;
+	public static inline var GRAVITY:Float = 100;
 
 	public var walkPath:Array<FlxPoint>;
 	public var points:Int;
@@ -23,6 +23,6 @@ class Enemy extends game.char.Actor {
 	}
 
 	public function updateMovement(elapsed:Float) {
-		velocity.y += GRAVITY * elapsed;
+		velocity.y = GRAVITY;
 	}
 }
