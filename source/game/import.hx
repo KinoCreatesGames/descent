@@ -20,6 +20,7 @@ using Lambda;
 using game.ext.MathExt;
 using game.ext.SpriteGroupExt;
 using game.ext.SpriteExt;
+using game.ext.PointExt;
 using ext.StringExt;
 using StringTools;
 using ext.ArrayExt;

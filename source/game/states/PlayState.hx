@@ -6,17 +6,18 @@ import flixel.FlxState;
 class PlayState extends FlxState {
 	public var player:Player;
 	public var enemyGrp:FlxTypedGroup<Enemy>;
+	public var playerBulletGrp:FlxTypedGroup<Bullet>;
 
 	override public function create() {
 		super.create();
 		bgColor = KColor.BEAU_BLUE;
-		createPlayer();
 		createGroups();
+		createPlayer();
 		player.addCrossHair();
 	}
 
 	public function createPlayer() {
-		player = new Player(24, 24);
+		player = new Player(24, 24, playerBulletGrp);
 		add(player);
 		FlxG.camera.follow(player, TOPDOWN_TIGHT, 1);
 	}
@@ -25,6 +26,10 @@ class PlayState extends FlxState {
 		enemyGrp = new FlxTypedGroup<Enemy>();
 		var enemy = new Turtle(32, 32);
 		enemyGrp.add(enemy);
+
+		playerBulletGrp = new FlxTypedGroup<Bullet>(50);
+
+		add(playerBulletGrp);
 		add(enemyGrp);
 	}
 
