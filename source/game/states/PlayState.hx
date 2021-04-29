@@ -50,6 +50,13 @@ class PlayState extends FlxState {
 				player.currentTarget = null;
 			}
 		});
+
+		FlxG.overlap(player, enemyGrp, playerTouchEnemy);
+	}
+
+	public function playerTouchEnemy(player:Player, enemy:Enemy) {
+		// Player Only takes 1 damage
+		player.takeDamage();
 	}
 
 	public function crossHairTouchEnemy(crossHair:FlxSprite, enemy:Enemy) {

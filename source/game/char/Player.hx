@@ -40,6 +40,12 @@ class Player extends FlxSprite {
 		}
 	}
 
+	public function takeDamage(?val:Int) {
+		val = val == null ? 1 : val;
+		this.health -= val;
+		FlxG.camera.shake(0.01, 0.2);
+	}
+
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 		updateCrossHair(elapsed);
