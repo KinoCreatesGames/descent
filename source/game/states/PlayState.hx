@@ -1,5 +1,7 @@
 package game.states;
 
+import game.objects.SpeedBoost;
+import game.objects.Collectible;
 import flixel.text.FlxText;
 import flixel.FlxState;
 
@@ -7,6 +9,7 @@ class PlayState extends FlxState {
 	public var player:Player;
 	public var enemyGrp:FlxTypedGroup<Enemy>;
 	public var playerBulletGrp:FlxTypedGroup<Bullet>;
+	public var collectibleGrp:FlxTypedGroup<Collectible>;
 
 	override public function create() {
 		super.create();
@@ -24,7 +27,7 @@ class PlayState extends FlxState {
 
 	public function createGroups() {
 		enemyGrp = new FlxTypedGroup<Enemy>();
-		var enemy = new Turtle(32, 32);
+		var enemy = new Turtle(40, 40);
 		enemyGrp.add(enemy);
 
 		playerBulletGrp = new FlxTypedGroup<Bullet>(50);
@@ -56,12 +59,39 @@ class PlayState extends FlxState {
 			}
 		});
 
-		FlxG.overlap(player, enemyGrp, playerTouchEnemy);
+		FlxG.collide(player, enemyGrp, playerTouchEnemy);
+		FlxG.overlap(player, collectibleGrp, playerTouchCollectible);
+		FlxG.overlap(playerBulletGrp, enemyGrp, playerBulletTouchEnemy);
 	}
 
 	public function playerTouchEnemy(player:Player, enemy:Enemy) {
 		// Player Only takes 1 damage
-		player.takeDamage();
+
+		var enemyType = Type.getClass(enemy);
+		switch (enemyType) {
+			case BouncePad:
+
+			case Spike:
+				player.takeDamage();
+				enemy.kill();
+			case Turtle:
+		}
+	}
+
+	public function playerTouchCollectible(player:Player,
+			collectible:Collectible) {
+		var collectibleType = Type.getClass(collectible);
+		switch (collectibleType) {
+			case SpeedBoost:
+				var bonus:SpeedBoost = cast collectible;
+				player.addSpeedBonus(bonus.boost);
+				collectible.kill();
+		}
+	}
+
+	public function playerBulletTouchEnemy(bullet:Bullet, enemy:Enemy) {
+		enemy.takeDamage();
+		bullet.kill();
 	}
 
 	public function crossHairTouchEnemy(crossHair:FlxSprite, enemy:Enemy) {

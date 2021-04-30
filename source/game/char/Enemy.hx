@@ -20,6 +20,13 @@ class Enemy extends game.char.Actor {
 
 	public function setSprite() {}
 
+	public function takeDamage() {
+		this.health -= 1;
+		if (this.health <= 0) {
+			this.kill();
+		}
+	}
+
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 		updateMovement(elapsed);

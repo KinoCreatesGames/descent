@@ -11,6 +11,7 @@ class Player extends FlxSprite {
 	public var crossHair:FlxSprite;
 	public var currentTarget:Enemy;
 	public var bulletGrp:FlxTypedGroup<Bullet>;
+	public var speedBonus:Float;
 
 	public static inline var BULLET_SPEED:Float = 150;
 
@@ -19,6 +20,7 @@ class Player extends FlxSprite {
 		drag.x = DRAG_X;
 		this.bulletGrp = bulletGrp;
 		makeGraphic(8, 8, KColor.WHITE);
+		speedBonus = 0;
 		create();
 	}
 
@@ -96,6 +98,10 @@ class Player extends FlxSprite {
 		}
 	}
 
+	public function addSpeedBonus(value:Float) {
+		speedBonus += value;
+	}
+
 	public function updateMovement(elapsed:Float) {
 		var left = FlxG.keys.anyPressed([A, LEFT]);
 		var right = FlxG.keys.anyPressed([D, RIGHT]);
@@ -115,7 +121,7 @@ class Player extends FlxSprite {
 			}
 			velocity.x = direction * MOVE_SPEED;
 		}
-		// acceleration.y = GRAVITY;
+		// acceleration.y = GRAVITY + speedBonus;
 		// Bind the X value of the sprite character on x axis
 		this.x = FlxMath.bound(this.x, 0, FlxG.width);
 	}
