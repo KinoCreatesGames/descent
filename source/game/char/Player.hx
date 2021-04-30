@@ -7,7 +7,9 @@ class Player extends FlxSprite {
 	public static inline var MOVE_SPEED:Float = 120;
 	public static inline var DRAG_X:Float = 100;
 	public static inline var GRAVITY:Float = 100;
+	public static inline var INVINCIBLE_TIME:Float = 1.5;
 
+	public var invincible:Bool = false;
 	public var crossHair:FlxSprite;
 	public var currentTarget:Enemy;
 	public var bulletGrp:FlxTypedGroup<Bullet>;
@@ -59,8 +61,14 @@ class Player extends FlxSprite {
 
 	public function takeDamage(?val:Int) {
 		val = val == null ? 1 : val;
-		this.health -= val;
-		FlxG.camera.shake(0.01, 0.2);
+		if (!invincible) {
+			this.health -= val;
+			FlxG.camera.shake(0.01, 0.2);
+			invincible = true;
+			this.flicker(INVINCIBLE_TIME, 0.04, true, (_) -> {
+				invincible = false;
+			});
+		}
 	}
 
 	override public function update(elapsed:Float) {
@@ -78,10 +86,11 @@ class Player extends FlxSprite {
 		var spacing = 4;
 
 		if (FlxG.mouse.justPressed) {
+			trace(pt, pt2, result);
 			var bullet = bulletGrp.recycle();
 			bullet.setPosition(ptR.x + spacing, ptR.y);
 			var angle = result.degreesBetween(FlxPoint.weak(1, 0));
-
+			trace(angle);
 			bullet.getPosition().rotate(ptR, angle);
 			bullet.velocity.set(result.x * BULLET_SPEED,
 				result.y * BULLET_SPEED);
@@ -121,7 +130,7 @@ class Player extends FlxSprite {
 			}
 			velocity.x = direction * MOVE_SPEED;
 		}
-		// acceleration.y = GRAVITY + speedBonus;
+		acceleration.y = GRAVITY + speedBonus;
 		// Bind the X value of the sprite character on x axis
 		this.x = FlxMath.bound(this.x, 0, FlxG.width);
 	}

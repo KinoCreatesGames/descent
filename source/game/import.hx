@@ -21,6 +21,7 @@ using game.ext.MathExt;
 using game.ext.SpriteGroupExt;
 using game.ext.SpriteExt;
 using game.ext.PointExt;
+using game.ext.ObjectExt;
 using ext.StringExt;
 using StringTools;
 using ext.ArrayExt;
