@@ -13,7 +13,6 @@ class Turtle extends Enemy {
 		var loopPath = [new FlxPoint(0, y), new FlxPoint(FlxG.width, y)];
 		super(x, y, loopPath, null);
 		this.path = new FlxPath(this.walkPath);
-
 		var pathType = dir == -1 ? FlxPath.LOOP_FORWARD : FlxPath.LOOP_BACKWARD;
 		this.path.start(null, TURTLE_SPEED, pathType);
 	}
