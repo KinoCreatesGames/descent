@@ -7,6 +7,7 @@ class BouncePad extends Enemy {
 
 	override public function setSprite() {
 		loadGraphic(AssetPaths.bouncepad__png, true, 8, 8, true);
+		this.immovable = true;
 		animation.add('idle', [0], 6);
 		animation.add('bounce', [1, 2, 0], 6);
 		animation.finishCallback = (animName) -> {

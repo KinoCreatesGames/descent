@@ -17,13 +17,14 @@ class Player extends FlxSprite {
 	public var speedBonus:Float;
 	public var damageSignal:FlxTypedSignal<Int -> Void>;
 
-	public static inline var BULLET_SPEED:Float = 150;
+	public static inline var BULLET_SPEED:Float = 400;
 
 	public function new(x:Float, y:Float, bulletGrp:FlxTypedGroup<Bullet>) {
 		super(x, y);
 		drag.x = DRAG_X;
 		this.bulletGrp = bulletGrp;
 		speedBonus = 0;
+		this.health = 3;
 		create();
 	}
 
@@ -38,6 +39,7 @@ class Player extends FlxSprite {
 	public function createAnimation() {
 		loadGraphic(AssetPaths.player_cat__png, true, 8, 8, true);
 		animation.add('falling', [0, 1, 2], 6);
+		animation.play('falling');
 	}
 
 	public function createSignal() {
@@ -100,11 +102,9 @@ class Player extends FlxSprite {
 		var spacing = 4;
 
 		if (FlxG.mouse.justPressed) {
-			trace(pt, pt2, result);
 			var bullet = bulletGrp.recycle();
 			bullet.setPosition(ptR.x + spacing, ptR.y);
 			var angle = result.degreesBetween(FlxPoint.weak(1, 0));
-			trace(angle);
 			bullet.getPosition().rotate(ptR, angle);
 			bullet.velocity.set(result.x * BULLET_SPEED,
 				result.y * BULLET_SPEED);
@@ -128,6 +128,7 @@ class Player extends FlxSprite {
 	public function updateMovement(elapsed:Float) {
 		var left = FlxG.keys.anyPressed([A, LEFT]);
 		var right = FlxG.keys.anyPressed([D, RIGHT]);
+		this.maxVelocity.set(MOVE_SPEED, MOVE_SPEED + speedBonus);
 		velocity.x = 0;
 		var direction = 1;
 		// var mousePos = FlxG.mouse.getWorldPosition()

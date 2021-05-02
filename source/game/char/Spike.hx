@@ -8,6 +8,7 @@ class Spike extends Enemy {
 
 	override public function setSprite() {
 		loadGraphic(AssetPaths.spike__png, true, 8, 8, true);
+		this.immovable = true;
 		// No Animation spike is spike.
 	}
 }

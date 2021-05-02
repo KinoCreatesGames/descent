@@ -29,7 +29,7 @@ class GameOverSubState extends FlxSubState {
 		var height = FlxG.height / 2;
 		background = new FlxSprite(width, height);
 		background.makeGraphic(cast width, cast height, KColor.TRANSPARENT);
-		background.screenCenter();
+		background.cameraCenter();
 		// Draw Border  +  Background
 		background.drawRect(0, 0, width, height, KColor.RICH_BLACK, {
 			thickness: 4,
@@ -41,7 +41,7 @@ class GameOverSubState extends FlxSubState {
 	public function createCongrats() {
 		gameOverText = new FlxText(background.x, background.y, -1,
 			Globals.TEXT_GAME_OVER, Globals.FONT_L);
-		gameOverText.screenCenterHorz();
+		gameOverText.cameraCenterHorz();
 		gameOverText.y += 30;
 		initialPosition = gameOverText.y;
 		add(gameOverText);

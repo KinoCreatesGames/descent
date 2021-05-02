@@ -29,22 +29,26 @@ class PlayerHUD extends FlxTypedGroup<FlxSprite> {
 		healthVisual = [];
 		var x = position.x;
 		var y = position.y;
-		var spacing = 8;
+		var spacing = 12;
 		var padding = 24;
 
 		for (i in 0...currentHealth) {
-			var healthSprite = new FlxSprite(padding * x, y);
+			trace(x);
+			var healthSprite = new FlxSprite(padding + x, y);
+			healthSprite.scrollFactor.set(0, 0);
 			healthSprite.loadGraphic(AssetPaths.heart_descent__png, false, 8,
-				8, false);
+				8, true);
 			healthVisual.push(healthSprite);
 			add(healthSprite);
-			x += 16 + spacing;
+			x += spacing;
 		}
 	}
 
 	public function createScore() {
+		var spacing = 48;
 		scoreText = new FlxText(20, 20, -1, 'Score', Globals.FONT_N);
 		scoreText.screenCenterHorz();
+		scoreText.x += spacing;
 		add(scoreText);
 	}
 
@@ -55,7 +59,7 @@ class PlayerHUD extends FlxTypedGroup<FlxSprite> {
 	}
 
 	public function updateHealth(value:Int) {
-		var val:Int = cast(healthVisual.length - currentHealth).clampf(0, 3);
+		var val:Int = cast(healthVisual.length - value).clampf(0, 3);
 		if (currentHealth < value) {
 			if (!healthVisual[0].visible) healthVisual.reverse();
 			healthVisual.slice(0, value).iter(showHealth);

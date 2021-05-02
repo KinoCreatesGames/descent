@@ -1,5 +1,6 @@
 package game.states;
 
+import flixel.FlxObject;
 import game.ui.PlayerHUD;
 import game.objects.SpeedBoost;
 import game.objects.Collectible;
@@ -23,23 +24,29 @@ class PlayState extends FlxState {
 	public var enemyBonus:Int = 0;
 
 	public static inline var SPAWN_TIME:Float = 1.5;
+	public static inline var COLLECTIBLE_SPAWN_TIME = 3.5;
 	public static inline var ENEMY_POINTS:Int = 150;
+	public static inline var BOUNCE_HEIGHT:Int = 200;
 
 	public var spawnTimer:Float = 0;
+	public var collectibleSpawnTimer:Float = 0;
 
 	override public function create() {
 		// camera.zoom = 2;
+		FlxG.worldDivisions = 12;
 		super.create();
 		bgColor = KColor.BEAU_BLUE;
 		createGroups();
 		createPlayer();
 		createPlayerHUD();
 		player.addCrossHair();
+		setupSignals();
 	}
 
 	public function createPlayer() {
 		player = new Player(24, 24, playerBulletGrp);
 		add(player);
+		player.screenCenterHorz();
 		FlxG.camera.follow(player, TOPDOWN_TIGHT, 1);
 	}
 
@@ -49,10 +56,12 @@ class PlayState extends FlxState {
 	}
 
 	public function createGroups() {
-		enemyGrp = new FlxTypedGroup<Enemy>(200);
+		enemyGrp = new FlxTypedGroup<Enemy>();
 		playerBulletGrp = new FlxTypedGroup<Bullet>(50);
+		collectibleGrp = new FlxTypedGroup<Collectible>();
 
 		add(playerBulletGrp);
+		add(collectibleGrp);
 		add(enemyGrp);
 	}
 
@@ -62,11 +71,18 @@ class PlayState extends FlxState {
 
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+		processStateChange();
 		processHUD(elapsed);
 		processSpawning(elapsed);
 		processDespawning();
 		updateCursorPosition(elapsed);
 		processCollisions();
+	}
+
+	function processStateChange() {
+		if (player.health <= 0) {
+			openSubState(new GameOverSubState());
+		}
 	}
 
 	function processHUD(elapsed:Float) {
@@ -83,29 +99,56 @@ class PlayState extends FlxState {
 			// Spawn Enemies and Power Ups outside of view
 			var tileCount = Math.floor(FlxG.width / 8);
 			for (i in 0...tileCount) {
-				if (i % 2 == 0) {
+				if (i % 3 == 0) {
 					var types = [EPad, ETurtle, ESpike];
 					var element = types[FlxG.random.int(0, types.length - 1)];
-					var x = i * 8;
-					var y = FlxG.height + 48;
+					var cameraPos = camera.scroll;
+					var x = (i * 8) + cameraPos.x;
+					var y = FlxG.height
+						+ 32
+						+ (FlxG.random.sign() * 16)
+						+ cameraPos.y;
+
 					var enemy = switch (element) {
 						case EPad:
-							new BouncePad(0, 0);
+							new BouncePad(x, y);
 						case ETurtle:
-							new Turtle(0, 0);
+							new Turtle(x, y);
 						case ESpike:
-							new Spike(0, 0);
+							new Spike(x, y);
 					}
-					enemy.setScreenPosition(FlxPoint.weak(x, y));
+					enemy.setPosition(x, y);
 					enemyGrp.add(enemy);
 				}
 			}
 		}
+
+		if (collectibleSpawnTimer > COLLECTIBLE_SPAWN_TIME) {
+			collectibleSpawnTimer = 0;
+			var tileCount = Math.floor(FlxG.width / 8);
+			for (i in 0...tileCount) {
+				if (i % 4 == 0 && FlxG.random.float() > .65) {
+					var collectible = new SpeedBoost(0, 0);
+					var x = i * 8;
+					var y = FlxG.height + 32 + (FlxG.random.sign() * 16);
+					collectible.setScreenPosition(new FlxPoint(x, y));
+					collectibleGrp.add(collectible);
+				}
+			}
+		}
+
+		collectibleSpawnTimer += elapsed;
 		spawnTimer += elapsed;
 	}
 
 	public function processDespawning() {
 		enemyGrp.members.iter((member) -> {
+			if (member.getScreenPosition().y < 0) {
+				member.kill();
+			}
+		});
+
+		collectibleGrp.members.iter((member) -> {
 			if (member.getScreenPosition().y < 0) {
 				member.kill();
 			}
@@ -121,12 +164,17 @@ class PlayState extends FlxState {
 	}
 
 	public function processCollisions() {
+		FlxG.worldBounds.set();
 		enemyGrp.members.iter((enemy) -> {
 			if (player.crossHair.overlaps(enemy, true)) {
 				player.currentTarget = enemy;
 			} else {
 				player.currentTarget = null;
 			}
+			// if (player.overlaps(enemy, true)) {
+			// 	playerTouchEnemy(player, enemy);
+			// 	FlxObject.separate(player, enemy);
+			// }
 		});
 
 		FlxG.collide(player, enemyGrp, playerTouchEnemy);
@@ -136,14 +184,17 @@ class PlayState extends FlxState {
 
 	public function playerTouchEnemy(player:Player, enemy:Enemy) {
 		// Player Only takes 1 damage
+		trace('overlap enemy');
 
 		var enemyType:Class<Enemy> = Type.getClass(enemy);
 		switch (enemyType) {
 			case BouncePad:
+				player.velocity.y -= BOUNCE_HEIGHT;
 			case Spike:
 				player.takeDamage();
 				enemy.kill();
 			case Turtle:
+				player.takeDamage();
 		}
 	}
 
