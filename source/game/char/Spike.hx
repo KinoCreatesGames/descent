@@ -7,6 +7,7 @@ class Spike extends Enemy {
 	}
 
 	override public function setSprite() {
-		makeGraphic(8, 8, KColor.RED);
+		loadGraphic(AssetPaths.spike__png, true, 8, 8, true);
+		// No Animation spike is spike.
 	}
 }

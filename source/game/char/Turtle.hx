@@ -19,9 +19,16 @@ class Turtle extends Enemy {
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
+		// updateAnim(elapsed);
+	}
+
+	public function updateAnim(elapsed) {
+		animation.play('moving');
 	}
 
 	override public function setSprite() {
-		makeGraphic(8, 8, KColor.YELLOW);
+		loadGraphic(AssetPaths.turtle_descent__png, true, 8, 8, true);
+		animation.add('moving', [1, 0, 2], 6);
+		animation.play('moving');
 	}
 }

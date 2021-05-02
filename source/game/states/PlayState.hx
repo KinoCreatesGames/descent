@@ -1,5 +1,6 @@
 package game.states;
 
+import game.ui.PlayerHUD;
 import game.objects.SpeedBoost;
 import game.objects.Collectible;
 import flixel.text.FlxText;
@@ -16,16 +17,23 @@ class PlayState extends FlxState {
 	public var enemyGrp:FlxTypedGroup<Enemy>;
 	public var playerBulletGrp:FlxTypedGroup<Bullet>;
 	public var collectibleGrp:FlxTypedGroup<Collectible>;
+	public var HUD:PlayerHUD;
+	public var score:Int = 0;
+	// Bonus Points from killing enemies
+	public var enemyBonus:Int = 0;
 
 	public static inline var SPAWN_TIME:Float = 1.5;
+	public static inline var ENEMY_POINTS:Int = 150;
 
 	public var spawnTimer:Float = 0;
 
 	override public function create() {
+		// camera.zoom = 2;
 		super.create();
 		bgColor = KColor.BEAU_BLUE;
 		createGroups();
 		createPlayer();
+		createPlayerHUD();
 		player.addCrossHair();
 	}
 
@@ -33,6 +41,11 @@ class PlayState extends FlxState {
 		player = new Player(24, 24, playerBulletGrp);
 		add(player);
 		FlxG.camera.follow(player, TOPDOWN_TIGHT, 1);
+	}
+
+	public function createPlayerHUD() {
+		HUD = new PlayerHUD(0, 0, cast player.health);
+		add(HUD);
 	}
 
 	public function createGroups() {
@@ -43,12 +56,25 @@ class PlayState extends FlxState {
 		add(enemyGrp);
 	}
 
+	public function setupSignals() {
+		player.damageSignal.add(HUD.updateHealth);
+	}
+
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
+		processHUD(elapsed);
 		processSpawning(elapsed);
 		processDespawning();
 		updateCursorPosition(elapsed);
 		processCollisions();
+	}
+
+	function processHUD(elapsed:Float) {
+		var depth = player.getPosition().y;
+		score = Math.floor(depth / 10);
+		var finalScore = score + enemyBonus;
+		HUD.updateDepth(depth);
+		HUD.updateScore(finalScore);
 	}
 
 	public function processSpawning(elapsed:Float) {
@@ -134,6 +160,9 @@ class PlayState extends FlxState {
 
 	public function playerBulletTouchEnemy(bullet:Bullet, enemy:Enemy) {
 		enemy.takeDamage();
+		if (!enemy.alive) {
+			HUD.updateScore(ENEMY_POINTS);
+		}
 		bullet.kill();
 	}
 

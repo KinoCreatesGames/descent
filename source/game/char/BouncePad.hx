@@ -6,6 +6,13 @@ class BouncePad extends Enemy {
 	}
 
 	override public function setSprite() {
-		makeGraphic(8, 8, KColor.DARK_BYZANTIUM);
+		loadGraphic(AssetPaths.bouncepad__png, true, 8, 8, true);
+		animation.add('idle', [0], 6);
+		animation.add('bounce', [1, 2, 0], 6);
+		animation.finishCallback = (animName) -> {
+			if (animName.contains('bounce')) {
+				animation.play('idle');
+			}
+		};
 	}
 }

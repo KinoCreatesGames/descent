@@ -1,5 +1,6 @@
 package game.char;
 
+import flixel.util.FlxSignal;
 import flixel.math.FlxVector;
 import flixel.math.FlxMath;
 
@@ -14,6 +15,7 @@ class Player extends FlxSprite {
 	public var currentTarget:Enemy;
 	public var bulletGrp:FlxTypedGroup<Bullet>;
 	public var speedBonus:Float;
+	public var damageSignal:FlxTypedSignal<Int -> Void>;
 
 	public static inline var BULLET_SPEED:Float = 150;
 
@@ -21,15 +23,25 @@ class Player extends FlxSprite {
 		super(x, y);
 		drag.x = DRAG_X;
 		this.bulletGrp = bulletGrp;
-		makeGraphic(8, 8, KColor.WHITE);
 		speedBonus = 0;
 		create();
 	}
 
 	public function create() {
+		createAnimation();
+		createSignal();
 		createBullets();
 		createPlayer();
 		createCrossHair();
+	}
+
+	public function createAnimation() {
+		loadGraphic(AssetPaths.player_cat__png, true, 8, 8, true);
+		animation.add('falling', [0, 1, 2], 6);
+	}
+
+	public function createSignal() {
+		damageSignal = new FlxTypedSignal<Int -> Void>();
 	}
 
 	public function createBullets() {
@@ -65,6 +77,8 @@ class Player extends FlxSprite {
 			this.health -= val;
 			FlxG.camera.shake(0.01, 0.2);
 			invincible = true;
+			// Sends a signal on the current player health
+			damageSignal.dispatch(cast this.health);
 			this.flicker(INVINCIBLE_TIME, 0.04, true, (_) -> {
 				invincible = false;
 			});
