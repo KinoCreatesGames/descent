@@ -1,5 +1,5 @@
 class Globals {
-	public static inline var GAME_TITLE = 'Love Defense ';
+	public static inline var GAME_TITLE = 'Descent ';
 	public static inline var GAME_SAVE_SLOTS:Int = 5;
 
 	public static inline var TEXT_START = 'Start';
@@ -21,9 +21,6 @@ class Globals {
 	public static inline var CMD_TIME_SCALE = 0.015;
 
 	// Player Globals
-	public static inline var PLAYER_HEALTH_CAP = 3;
-	public static inline var PLAYER_BULLET_CD:Float = 0.15;
-	public static inline var PLAYER_GAL_NAME:String = 'Koyuki';
 	public static var HIGH_SCORE:Int = 0;
 
 	// Font Sizes
