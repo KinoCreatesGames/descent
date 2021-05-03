@@ -33,7 +33,6 @@ class PlayerHUD extends FlxTypedGroup<FlxSprite> {
 		var padding = 24;
 
 		for (i in 0...currentHealth) {
-			trace(x);
 			var healthSprite = new FlxSprite(padding + x, y);
 			healthSprite.scrollFactor.set(0, 0);
 			healthSprite.loadGraphic(AssetPaths.heart_descent__png, false, 8,

@@ -180,8 +180,6 @@ class PlayState extends FlxState {
 
 	public function playerTouchEnemy(player:Player, enemy:Enemy) {
 		// Player Only takes 1 damage
-		trace('overlap enemy');
-
 		var enemyType:Class<Enemy> = Type.getClass(enemy);
 		switch (enemyType) {
 			case BouncePad:
@@ -216,7 +214,6 @@ class PlayState extends FlxState {
 	}
 
 	public function crossHairTouchEnemy(crossHair:FlxSprite, enemy:Enemy) {
-		trace('Overlap enemy');
 		player.currentTarget = enemy;
 	}
 }
