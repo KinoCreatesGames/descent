@@ -189,6 +189,8 @@ class PlayState extends FlxState {
 		var enemyType:Class<Enemy> = Type.getClass(enemy);
 		switch (enemyType) {
 			case BouncePad:
+				// Play Bounce animation
+				enemy.animation.play('bounce');
 				player.velocity.y -= BOUNCE_HEIGHT;
 			case Spike:
 				player.takeDamage();
