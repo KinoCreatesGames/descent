@@ -131,11 +131,6 @@ class Player extends FlxSprite {
 		this.maxVelocity.set(MOVE_SPEED, MOVE_SPEED + speedBonus);
 		velocity.x = 0;
 		var direction = 1;
-		// var mousePos = FlxG.mouse.getWorldPosition()
-		// 	.copyTo(FlxPoint.weak(0, 0));
-		// var scPos = FlxG.mouse.getScreenPosition();
-		// crossHair.setPosition(scPos.x, scPos.y);
-		// crossHair.setPosition(FlxG.mouse.x, FlxG.mouse.y);
 
 		if (left || right) {
 			if (left) {}
