@@ -9,7 +9,7 @@ class BouncePad extends Enemy {
 		loadGraphic(AssetPaths.bouncepad__png, true, 8, 8, true);
 		this.immovable = true;
 		animation.add('idle', [0], 6);
-		animation.add('bounce', [1, 2, 0], 6);
+		animation.add('bounce', [1, 2, 0], 6, false);
 		animation.finishCallback = (animName) -> {
 			if (animName.contains('bounce')) {
 				animation.play('idle');

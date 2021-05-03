@@ -171,10 +171,6 @@ class PlayState extends FlxState {
 			} else {
 				player.currentTarget = null;
 			}
-			// if (player.overlaps(enemy, true)) {
-			// 	playerTouchEnemy(player, enemy);
-			// 	FlxObject.separate(player, enemy);
-			// }
 		});
 
 		FlxG.collide(player, enemyGrp, playerTouchEnemy);
