@@ -1,5 +1,6 @@
 package game.states;
 
+import flixel.FlxObject;
 import game.ui.TextButton;
 
 class GameOverSubState extends FlxSubState {
@@ -21,6 +22,12 @@ class GameOverSubState extends FlxSubState {
 		createBackground();
 		createCongrats();
 		createButtons();
+		members.iter((member) -> {
+			if (Std.isOfType(member, FlxObject)) {
+				var obj:FlxObject = cast member;
+				obj.scrollFactor.set(0, 0);
+			}
+		});
 	}
 
 	// note 480 x 270
